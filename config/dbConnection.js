@@ -1,25 +1,15 @@
-// const mongoose =require("mongoose");
-// const connectDb=async()=>{
-//     try{
-//       const connect=await mongoose.connect(mongodb://localhost:27017);
-//     }
-//     catch(err){
-//         console.log(err);
-//     }
-// };
-// module.exports=connectDb;
 const mongoose = require('mongoose');
-
-const connectDb = async () => {
+const connectDB = async () => {
   try {
-    const connect = await mongoose.connect('mongodb://127.0.0.1:27017/User', {
-      useNewUrlParser: true,
+    const con = await mongoose.connect(process.env.MONGO_URI, {
+      useNewURLParser: true,
       useUnifiedTopology: true,
+      // useFindAndModify: true,
     });
-    console.log('MongoDB connected successfully');
-  } catch (err) {
-    console.error('MongoDB connection error:', err.message);
+    console.log(`DB connected ${con.connection.host}`);
+  } catch (error) {
+    console.log(`Error:${error.message}`);
+    process.exit();
   }
 };
-
-module.exports = connectDb;
+module.exports = connectDB;

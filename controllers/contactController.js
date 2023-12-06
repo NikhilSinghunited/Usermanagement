@@ -48,13 +48,14 @@ const getContact = asyncHandler(async (req, res, next) => {
 // @route PUT /api/contacts/:id
 // @access private
 const updateContact = asyncHandler(async (req, res, next) => {
+  console.log(req.user.id);
   const contact = await Contact.findById(req.params.id);
-  console.log(contact);
+
   if (!contact) {
     res.status(404);
     return next(new Error('Contact not found'));
   }
-  console.log(contact.user_id);
+
   if (contact.user_id !== req.user.id) {
     res.status(403);
     return next(
@@ -64,20 +65,21 @@ const updateContact = asyncHandler(async (req, res, next) => {
 
   const updatedContact = await Contact.findByIdAndUpdate(
     req.params.id,
-    req.body,
     {
-      new: true,
-      runvalidators: true,
-    }
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+    },
+
+    { new: true }
   );
-  console.log(updatedContact);
-  res.status(200).json(updateContact);
+  res.status(200).json(updatedContact);
 });
-// const updateContact = asyncHandler(async (req, res, next) => {
+// const updateName = asyncHandler(async (req, res, next) => {
 //   var { contactid } = req.params;
 //   var { name, email, phone } = req.body;
 //   let checkIfContactExists;
-
+//   console.log(name);
 //   try {
 //     checkIfContactExists = await contactModel.findOne({
 //       _id: contactid,
@@ -92,7 +94,7 @@ const updateContact = asyncHandler(async (req, res, next) => {
 //   }
 
 //   try {
-//     let updateContact = await contactModel.updateOne(
+//     let updatedContact = await contactModel.updateOne(
 //       { _id: contactid },
 //       {
 //         name,
@@ -101,8 +103,8 @@ const updateContact = asyncHandler(async (req, res, next) => {
 //         updatedAt: new Date(),
 //       }
 //     );
-//     console.log(updateContact);
-//     if (!updateContact) {
+//     console.log(updatedContact);
+//     if (!updateName) {
 //       return res.status(500).send('Contact not updated, something went wrong');
 //     }
 
