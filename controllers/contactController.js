@@ -168,6 +168,8 @@ const updateContact = asyncHandler(async (req, res, next) => {
 //@access private
 const deleteContact = asyncHandler(async (req, res, next) => {
   const contact = await Contact.findById(req.params.id);
+  console.log(req.params.id);
+  console.log('hello');
   if (!contact) {
     res.status(404);
     return next(new Error('Contact not found'));
